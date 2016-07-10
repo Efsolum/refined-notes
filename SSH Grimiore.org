@@ -1,0 +1,34 @@
+* SSH Grimore
+** SSH/Key life cycle
+-p port
+Port to connect to on the remote host.  This can be specified on a
+per-host basis in the configuration file.
+
+*** Login to server/host
+
+ssh-add -L
+ssh-add <key-path>/<private-key> # add key if not in the agent
+ssh <username>@<host> [-p <port>]
+ssh-add -L
+
+*** New ssh key
+
+cd <key-path>
+ssh-keygen -t ed25519 -f <name>_ed25519
+cd ~/
+ssh-add  <priviate-key-path>
+ssh-add -L
+# ensure there are no active connection are sockets
+ssh-copy-id -i <public-key-path> [-p <port>] <username>@<remote-server>
+ssh <username>@<remote-server>
+
+*** Old ssh key
+
+# on local server
+cd <key-path>
+mv -v <key> <key>_old
+# see/goto new ssh key, then continue.
+
+ssh <username>@<host> [-p <port>]
+sed '/<name of file>$/d' ~/.ssh/authorized_keys
+sed -i '/<name of file>$/d' ~/.ssh/authorized_keys
