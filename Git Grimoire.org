@@ -1,0 +1,54 @@
+* Git Grimoire
+** Install
+
+*** recipe: 1468151265, install with stow (source)
+
+CentOS
+$ sudo yum install -y curl-devel expat-devel gettext-devel \
+openssl-devel perl-devel zlib-devel
+$ sudo yum install -y asciidoc xmlto docbook2X
+
+Debian
+$ sudo apt-get install -y libcurl4-gnutls-dev libexpat1-dev gettext \
+libz-dev libssl-dev
+$ sudo apt-get install -y asciidoc xmlto docbook2x
+
+$ wget 'https://www.kernel.org/pub/software/scm/git/git-2.9.0.tar'{.sign,.xz}
+$ gpg2 --keyserver keys.gnupg.net --recv-keys 96AFE6CB
+$ gpg2 --verify git-2.9.0.tar.sign git-2.9.0.tar.xz
+$ tar -xf git-2.9.0.tar.xz
+
+$ cd git-2.9.0
+
+$ make configure
+$ ./configure --prefix=${HOME}/tools
+$ make
+$ make man info
+
+$ make install prefix=${HOME}/tools/stow/git-2.9.0
+$ make install-man install-info prefix=${HOME}/tools/stow/git-2.9.0
+
+$ cd ~/tools/stow
+$ stow -S git-2.9.0
+
+$ cd ~/
+
+Zsh
+$ rehash
+
+$ which git
+$ git version
+
+Git - Installing Git
+https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+
+How To Install Git on CentOS 7 | DigitalOcean
+https://www.digitalocean.com/community/tutorials/how-to-install-git-on-centos-7
+
+*** recipe: 1468151252, install with APT
+$ apt-get install git
+
+Optional
+$ apt-get install git-doc
+$ apt-get install git-annex
+
