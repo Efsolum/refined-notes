@@ -14,8 +14,6 @@ libz-dev libssl-dev
 $ sudo apt-get install -y asciidoc xmlto docbook2x
 
 $ wget 'https://www.kernel.org/pub/software/scm/git/git-2.9.0.tar'{.sign,.xz}
-$ gpg2 --keyserver keys.gnupg.net --recv-keys 96AFE6CB
-$ gpg2 --verify git-2.9.0.tar.sign git-2.9.0.tar.xz
 $ tar -xf git-2.9.0.tar.xz
 
 $ cd git-2.9.0
