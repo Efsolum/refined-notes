@@ -44,9 +44,21 @@ How To Install Git on CentOS 7 | DigitalOcean
 https://www.digitalocean.com/community/tutorials/how-to-install-git-on-centos-7
 
 *** recipe: 1468151252, install with APT
-$ apt-get install git
+$ apt-get install git git-doc
 
 Optional
-$ apt-get install git-doc
 $ apt-get install git-annex
+** Show config
 
+$ git config --list
+** Initialize a new git repo
+
+Create a new directory and initialize it.
+git init <project-name>
+
+Initialize the current directory as a git repository.
+git init
+
+Using Emacs Dired and Magit
+S-+ <project-name>
+M-x magit-init <project-name>

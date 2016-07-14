@@ -1,0 +1,146 @@
+* Guix & GuixSD
+** Installation
+
+*** GuixSD: Installation of Guix distro
+
+**** Install using the usb image, recipe: 1461320171
+***** Download & extract USB Image
+
+$ zsh -li
+$ export GUIX_ARCHITECHTURE=x86_64
+$ export GUIX_VERSION=0.10.0
+$ export USB_IMAGE=guixsd-usb-install-${GUIX_VERSION}.${GUIX_ARCHITECHTURE}-linux
+$ wget ftp://alpha.gnu.org/gnu/guix/${USB_IMAGE}.xz{.sig,}
+
+$ gpg2 --keyserver keys.gnupg.net --recv-keys 3D9AEBB5
+$ gpg2 --verify ${USB_IMAGE}.xz{.sig,}
+
+$ xz --decompress --keep --verbose ${USB_IMAGE}.xz
+
+***** Libvirt setup, Execute on Host
+
+Before install
+$ export DISPLAY=:100
+$ export LIBVIRT_DEFAULT_URI=qemu:///system
+$ ./build.zsh
+
+After install
+$ virsh domblklist guixsd-0.10.0
+$ virsh detach-disk guixsd-0.10.0 sda --config
+$ virsh domblklist guixsd-0.10.0
+$ virsh start guixsd-0.10.0 && virt-viewer guixsd-0.10.0 &
+
+***** Execute on Guest
+$ ip link show
+$ ip link set ens3 up
+$ dhclient -v ens3
+$ ping -c 4 gnu.org
+
+Paritioning plan
+Assumming disk is 20GiB
+Bootloader 2MiB
+/boot 300MiB ext2/4
+Swap 1GiB
+/ (rest of disk space) ext4
+
+$ lsblk
+Start parted shell
+$ parted -a optimal /dev/sda
+(parted) unit MiB
+(parted) mklabel gpt
+(parted) mkpart primary 1MiB 3MiB
+(parted) name 1 grub
+(parted) set 1 bios_grub on
+(parted) print
+(parted) mkpart primary 3MiB 303MiB
+(parted) name 2 boot
+(parted) print
+
+Calculation on host with zsh shell
+$ ((mib = 1 * (1024 ** 1)))
+$ print ${mib}
+1024
+$ print $((mib + 303))
+1327
+
+(parted) mkpart primary 303MiB 1327MiB
+(parted) name 3 swap
+(parted) print
+(parted) mkpart primary 1327MiB -1
+(parted) name 4 root
+(parted) set 2 boot on
+(parted) print
+(parted) quit
+
+$ lsblk
+$ mkfs.ext4 /dev/sda2
+$ mkswap /dev/sda3
+$ mkfs.ext4 /dev/sda4
+$ lsblk -f
+
+$ lsblk
+$ mount /dev/sda4 /mnt
+$ mkdir /mnt/boot
+$ mount /dev/sda2 /mnt/boot
+$ df -hT
+
+$ herd start cow-store /mnt
+$ mkdir /mnt/etc
+$ ls /etc/configuration # optional
+$ cp /etc/configuration/bare-bones.scm /mnt/etc/config.scm
+$ zile /mnt/etc/config.scm
+
+$ mount --bind /mnt/tmp /tmp
+$ swapon /dev/sda3
+$ guix system init /mnt/etc/config.scm /mnt
+$ umount /tmp
+$ swapoff /dev/sd3
+$ shutdown
+*** Guix: Installation on foreign OS
+**** Install guix as root, recipe: 1460090703
+
+wget ftp://alpha.gnu.org/gnu/guix/guix-binary-0.10.0.x86_64-linux.tar.xz{,.sig}
+gpg --keyserver keys.gnupg.net --recv-keys 3D9AEBB5
+gpg --verify guix-binary-0.10.0.x86_64-linux.tar.xz.sig
+
+mv guix-binary-0.10.0.x86_64-linux.tar.xz* /tmp
+cd /tmp
+
+sudo tar --warning=no-timestamp -xf guix-binary-0.10.0.x86_64-linux.tar.xz
+sudo bash -c 'mv var/guix /var/ && mv gnu /'
+
+sudo ln -sf /var/guix/profiles/per-user/root/guix-profile ~root/.guix-profile
+groupadd --system guixbuild
+sudo bash -c '
+> for i in `seq -w 1 10`;
+>   do
+>     useradd -g guixbuild -G guixbuild           \
+>             -d /var/empty -s `which nologin`    \
+>             -c "Guix build user $i" --system    \
+>             guixbuilder$i;
+>   done'
+
+sudo cp ~root/.guix-profile/lib/systemd/system/guix-daemon.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo bash -c 'systemctl start guix-daemon && systemctl enable guix-daemon'
+systemctl status guix-daemon
+
+sudo mkdir -p /usr/local/bin
+cd /usr/local/bin
+sudo ln -s /var/guix/profiles/per-user/root/guix-profile/bin/guix
+
+sudo mkdir -p /usr/local/share/info
+cd /usr/local/share/info
+sudo bash -c '
+> for i in /var/guix/profiles/per-user/root/guix-profile/share/info/* ;
+>   do ln -s $i ; done'
+info guix
+
+sudo -iu root
+echo 'export PATH="$HOME/.guix-profile/bin:$HOME/.guix-profile/sbin:${PATH}"' >> $HOME/.bashrc
+echo 'export GUIX_LOCPATH=$HOME/.guix-profile/lib/locale' >> $HOME/.bashrc
+source $HOME/.bashrc
+exit
+
+sudo bash -c 'guix archive --authorize < ~root/.guix-profile/share/guix/hydra.gnu.org.pub'
+
