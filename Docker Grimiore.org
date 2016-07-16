@@ -89,3 +89,7 @@ $ ./mysql-build.bash &>/dev/stdout &>${BUILD_LOG}
 
 $ export BUILD_LOG=${HOME}/tmp/logs/docker-build.log
 $ grep 'Step' $BUILD_LOG
+
+** Stop and Remove all containers
+
+$ docker stop $(docker ps -a -q) | xargs docker rm
