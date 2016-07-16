@@ -1,0 +1,91 @@
+* Docker Grimoire
+** Installation
+*** Recipe 1466361043: Install docker on debian from apt repo
+
+$ sudo apt-get install -y apt-transport-https ca-certificates
+$ sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 \
+--recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+
+$ sudo bash -c 'cat <<EOF > /etc/apt/sources.list.d/docker.list
+deb https://apt.dockerproject.org/repo debian-jessie main
+EOF'
+
+$ sudo apt-get update
+
+Check which repo docker is coming from
+$ apt-cache policy docker-engine
+
+$ sudo apt-get install -y docker-engine docker-compose
+$ sudo systemctl start docker
+$ systemctl status docker
+
+# Docker now sets this, but it's here as a reminder to check it.
+$ sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
+
+# Add users to the docker group
+$ sudo usermod -a -G docker $USER
+$ newgrp docker
+
+# Test Installation
+$ docker info
+$ docker version
+$ docker run hello-world
+
+Source:
+Installation on Debian
+https://docs.docker.com/engine/installation/linux/debian/
+*** Recipe 1466089143: Install docker on centos from docker rpm repo
+
+$ sudo yum update
+
+$ sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+EOF
+
+$ sudo yum install -y docker-engine
+$ sudo systemctl start docker
+$ systemctl status docker
+
+# Docker now sets this, but it's here as a reminder to check it.
+$ sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
+
+# Add users to the docker group
+$ sudo usermod -a -G docker $USER
+$ newgrp docker
+
+# Test Installation
+$ docker info
+$ docker version
+$ sudo docker run hello-world
+
+Installation on CentOS
+https://docs.docker.com/engine/installation/linux/centos/
+** Bind mount (Linux)
+
+$ mkdir /home/projects/docker
+$ sudo bash -c 'mv /var/lib/docker/* /home/projects/docker'
+$ sudo mount --bind /home/projects/docker /var/lib/docker
+$ findmnt | grep "\["
+** List images
+
+docker images | ruby -ane 'print $F[0..2].join(" "), "\n"'
+** Dockerfile developement
+
+*** Setup and using log
+
+$ export BUILD_LOG=${HOME}/tmp/logs/docker-build.log
+
+Inital setup
+$ mkdir -p $(dirname ${BUILD_LOG})
+
+$ ./mysql-build.bash &>/dev/stdout &>${BUILD_LOG}
+
+*** Searching Log
+
+$ export BUILD_LOG=${HOME}/tmp/logs/docker-build.log
+$ grep 'Step' $BUILD_LOG
