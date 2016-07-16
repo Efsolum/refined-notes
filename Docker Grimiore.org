@@ -93,3 +93,69 @@ $ grep 'Step' $BUILD_LOG
 ** Stop and Remove all containers
 
 $ docker stop $(docker ps -a -q) | xargs docker rm
+** Dockerfile
+*** Dockerfile: APK install snippet
+
+RUN apk update
+RUN apk add \
+# packages go here \
+&& rm -rf /var/cache/apk/*
+*** Dockerfile: APT install snippet
+
+RUN apt-get update
+RUN apt-get install \
+--yes \
+--no-reccommends \
+# packages go here \
+&& apt-get clean
+
+*** copy a directory to docker build
+copy a directory to docker build and not just it's contents.
+
+ADD go /usr/local/go
+# or
+COPY go /usr/local/go
+*** Set locale
+
+#Install and setup locales
+RUN apt-get install -y \
+		locales \
+		&& apt-get clean
+RUN sed -i "s/# $LANG/$LANG/gI" /etc/locale.gen && \
+		locale-gen
+
+*** Set Data/Time & Timezone
+
+# Set update timezone
+RUN echo "{{ base.timezone }}" > /etc/timezone \
+		&& dpkg-reconfigure -f noninteractive tzdata
+
+# Vars
+base:
+	timezone: America/Barbados
+*** Install APT https transport
+
+RUN apt-get install -y \
+		apt-transport-https \
+		apt-utils \
+		ca-certificates \
+		lsb-release \
+		&& apt-get clean
+
+# previous method
+RUN apt-get install -y \
+		apt-transport-https \
+		lsb-release \
+		|| apt-get install --fix-broken	\
+		&& apt-get clean
+*** Update APT cache (jinja2 macro)
+// Jinja2
+
+{% macro apt_update() -%}
+RUN rm -rf /var/lib/apt/lists/* \
+		&& apt-get clean \
+		&& apt-get update
+{%- endmacro %}
+
+// macro call
+{{ apt_update() }}
