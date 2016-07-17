@@ -1,0 +1,253 @@
+* Maven (Java) Grimiore
+** Maven/Project Dependency Repositories
+
+The Central Repository Search Engine
+http://search.maven.org/
+
+Nexus Repository Manager
+https://oss.sonatype.org/#welcome
+** Print version
+
+$ mvn --version
+** Generate Project
+*** Generate and run a Hello world project
+
+$ mvn archetype:generate \
+-DgroupId=com.mycompany.app  \
+-DartifactId=my-app  \
+-DarchetypeArtifactId=maven-archetype-quickstart  \
+-DinteractiveMode=false
+
+$ cd my-app
+
+Build Project
+$ mvn package
+
+Run the app
+$ java -cp target/my-app-1.0-SNAPSHOT.jar com.mycompany.app.App
+
+Maven – Maven in 5 Minutes
+https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
+*** Generate a web project
+
+$ mvn archetype:generate -DarchetypeArtifactId=maven-archetype-webapp
+*** Generate a project (examples)
+
+$ mvn archetype:generate \
+-DarchetypeGroupId=<group-id> \
+-DarchetypeArtifactId=<archetype-id> \
+-DgroupId=<project-group-id> \
+-DartifactId=<project-id> \
+-Dversion=<project-version> \
+-DinteractiveMode=false
+
+
+Examples
+$ mvn archetype:generate \
+-DgroupId=my.myapp.app  \
+-DartifactId=my-app  \
+-DarchetypeArtifactId=maven-archetype-quickstart  \
+-DinteractiveMode=false
+
+$ mvn archetype:generate \
+-DgroupId=my.myapp.app  \
+-DartifactId=my-app  \
+-DarchetypeArtifactId=maven-archetype-webapp \
+-DinteractiveMode=false
+
+$ mvn archetype:generate \
+-DarchetypeGroupId=org.apache.maven.archetypes \
+-DarchetypeArtifactId=maven-archetype-webapp \
+-DarchetypeVersion=1.0 \
+-DgroupId=com.maventest \
+-DartifactId=mywebtest \
+-Dversion=1.0-SNAPSHOT \
+-DinteractiveMode=false
+
+References
+JSF - First Application
+http://www.tutorialspoint.com/jsf/jsf_first_application.htm
+
+java - Unable to create a new maven hello-world project - Stack Overflow
+http://stackoverflow.com/questions/29147329/unable-to-create-a-new-maven-hello-world-project
+
+Maven Archetype Plugin – archetype:create
+http://maven.apache.org/archetype/maven-archetype-plugin/create-mojo.html
+*** Generate a project with subprojects
+
+Generate parent project
+$ mvn archetype:generate \
+-DgroupId=com.apress.gswmbook \
+-DartifactId=gswm-parent \
+-Dversion=1.0.0-SNAPSHOT \
+-DarchetypeGroupId=org.codehaus.mojo.archetypes \
+-DarchetypeArtifactId=pom-root
+
+Generate Web Project 
+$ mvn archetype:generate \
+-DgroupId=com.apress.gswmbook \
+-DartifactId=gswm-web \
+-Dversion=1.0.0-SNAPSHOT \
+-Dpackage=war \
+-DarchetypeArtifactId=maven-archetype-webapp
+
+Service Project
+$ mvn archetype:generate \
+-DgroupId=com.apress.gswmbook \
+-DartifactId=gswm-service
+-Dversion=1.0.0-SNAPSHOT \
+-DarchetypeArtifactId=maven-archetype-quickstart
+-DinteractiveMode=false
+
+$ mvn archetype:generate \
+-DgroupId=com.apress.gswmbook \
+-DartifactId=gswm-repository \
+-Dversion=1.0.0-SNAPSHOT \
+-DarchetypeArtifactId=maven-archetype-quickstart \
+-DinteractiveMode=false
+
+
+References:
+Id: 395 
+Title: Introducing Maven
+Author(s): Balaji Varanasi & Sudha Belida
+ISBN: 9781484208427
+Chapter 6: Maven Archetypes
+
+Apache Maven Eclipse Plugin - Multiple Module Project with Eclipse
+http://maven.apache.org/plugins/maven-eclipse-plugin/reactor.html
+
+Maven: Split Your Project Into Sub-Projects | i-proving.com
+http://i-proving.com/2007/03/29/split-your-project-into-sub-projects/
+** Show effective POM
+
+$ mvn help:effective-pom
+** List repositories
+
+$ mvn help:evaluate
+
+Enter this variable when prompted
+${project.repositories}
+
+Enter '0' to exit.
+
+java - How can I ask Maven for a list of the default repositories? - Stack Overflow
+http://stackoverflow.com/questions/2877436/how-can-i-ask-maven-for-a-list-of-the-default-repositories
+
+** Add Jetty to a generated project (web)
+
+$ emacs pom.xml
+
+Add the following
+
+<plugin>
+	<groupId>org.eclipse.jetty</groupId>
+	<artifactId>jetty-maven-plugin</artifactId>
+	<version>9.3.10.v20160621</version>
+</plugin>
+
+Partial Example
+<build>
+	<finalName>my-app</finalName>
+	 <plugins>
+		<plugin>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-maven-plugin</artifactId>
+			<version>9.3.10.v20160621</version>
+		</plugin>
+	</plugins>
+</build>
+
+Start the Jetty Server
+$ mvn jetty:run
+
+Configuring the Jetty Maven Plugin
+https://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html
+** Cargo
+*** Help
+
+$ mvn cargo:help
+*** Deploy project to Glassfish
+
+cargo-maven2-plugin
+https://oss.sonatype.org/#nexus-search;quick~cargo
+
+<dependency>
+  <groupId>org.codehaus.cargo</groupId>
+  <artifactId>cargo-maven2-plugin</artifactId>
+  <version>1.4.14</version>
+</dependency>
+
+$ emacs ./pom.xml
+
+...
+<plugin>
+	 <groupId>org.codehaus.cargo</groupId>
+	 <artifactId>cargo-maven2-plugin</artifactId>
+	 <version>1.5.1-SNAPSHOT</version>
+	 <configuration>
+		 <container>
+			 <containerId>glassfish4x</containerId>
+			 <type>remote</type>
+		 </container>
+		 <configuration>
+			 <type>runtime</type>
+			 <properties>
+				 <cargo.hostname>172.17.0.5</cargo.hostname>
+				 <cargo.remote.username>admin</cargo.remote.username>
+				 <cargo.remote.password>admin</cargo.remote.password>
+			 </properties>
+		 </configuration>
+	 </configuration>
+	 <dependencies>
+		 <dependency>
+			 <groupId>org.glassfish.deployment</groupId>
+			 <artifactId>deployment-client</artifactId>
+			 <version>3.2-b06</version>
+		 </dependency>
+	 </dependencies>
+</plugin>
+...
+<pluginRepositories>                                                                                                                                                                            
+  <pluginRepository>                                                                                                                                                                            
+    <id>sonatype-snapshots</id>                                                                                                                                                                 
+    <name>Sonatype Snapshots</name>                                                                                                                                                             
+    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>                                                                                                                         
+    <releases>                                                                                                                                                                                  
+      <enabled>false</enabled>                                                                                                                                                                  
+    </releases>                                                                                                                                                                                 
+    <snapshots>                                                                                                                                                                                 
+      <enabled>true</enabled>                                                                                                                                                                   
+    </snapshots>                                                                                                                                                                                
+  </pluginRepository>                                                                                                                                                                           
+</pluginRepositories>                                                                                                                                                                           
+<repositories>                                                                                                                                                                                  
+  <repository>                                                                                                                                                                                  
+    <id>sonatype-snapshots</id>                                                                                                                                                                 
+    <name>Sonatype Snapshots</name>                                                                                                                                                             
+    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>                                                                                                                         
+    <releases>                                                                                                                                                                                  
+      <enabled>false</enabled>                                                                                                                                                                  
+    </releases>                                                                                                                                                                                 
+    <snapshots>                                                                                                                                                                                 
+      <enabled>true</enabled>                                                                                                                                                                   
+    </snapshots>                                                                                                                                                                                
+  </repository>                                                                                                                                                                                 
+</repositories>                                   
+
+$ mvn package cargo:deploy
+
+Codehaus Cargo - Maven2 plugin
+https://codehaus-cargo.github.io/cargo/Maven2+plugin.html#Maven2plugin-gettingstarted
+
+GlassFish 3 + Maven + remote deploy - Stack Overflow
+http://stackoverflow.com/questions/7499396/glassfish-3-maven-remote-deploy
+*** Redeploy an app to Glassfish
+
+$ mvn package cargo:redeploy
+Or
+$ mvn cargo:undeploy package cargo:deploy
+*** Undeploy an app to Glassfish
+
+$ mvn cargo:undeploy
+

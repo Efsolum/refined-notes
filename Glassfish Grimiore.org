@@ -1,0 +1,115 @@
+* Glassfish (Java EE) Grimiore
+** Installation
+*** Install Java Alpine
+
+$ export JAVA_MINOR_VERSION=${JAVA_MINOR_VERSION:-'8'}
+$ export JAVA_VERSION=${JAVA_VERSION:-"1.${JAVA_MINOR_VERSION}"}
+
+$ export JAVA_HOME="/usr/lib/jvm/java-1.${JAVA_MINOR_VERSION}-openjdk"
+$ export PATH="${JAVA_HOME}/bin:$PATH"
+
+$ apk add openjdk${JAVA_MINOR_VERSION} openjdk${JAVA_MINOR_VERSION}-jre
+
+$ which java && java -version
+$ which javac && javac -version
+*** Install Glassfish
+
+$ export JAVA_MINOR_VERSION=${JAVA_MINOR_VERSION:-'8'}
+$ export JAVA_VERSION=${JAVA_VERSION:-"1.${JAVA_MINOR_VERSION}"}
+
+$ export JAVA_HOME="/usr/lib/jvm/java-1.${JAVA_MINOR_VERSION}-openjdk"
+$ export PATH="${JAVA_HOME}/bin:$PATH"
+
+$ export GLASSHFISH_MAJOR_VERSION=${GLASSHFISH_MAJOR_VERSION:-'4'}
+$ export GLASSHFISH_VERSION=${GLASSHFISH_VERSION:-"${GLASSHFISH_MAJOR_VERSION}.1"}
+$ export GLASSFISH_HOME="/usr/local/glassfish-${GLASSHFISH_VERSION}"
+$ export PATH="${GLASSFISH_HOME}/bin:$PATH"
+
+$ mkdir -v /tmp/glassfish-build
+$ cd /tmp/glassfish-build
+
+$ wget "http://download.java.net/glassfish/${GLASSHFISH_VERSION}/release/glassfish-${GLASSHFISH_VERSION}.zip"
+$ unzip glassfish-4.1.zip
+
+$ mv -v glassfish${GLASSHFISH_MAJOR_VERSION} ${GLASSFISH_HOME}
+$ cd /
+$ rm -vr /tmp/glassfish-build
+
+$ chmod +x ${GLASSFISH_HOME}/bin/*
+
+** Environment
+
+$ export JAVA_MINOR_VERSION=${JAVA_MINOR_VERSION:-'8'}
+$ export JAVA_VERSION=${JAVA_VERSION:-"1.${JAVA_MINOR_VERSION}"}
+
+$ export JAVA_HOME="/usr/lib/jvm/java-1.${JAVA_MINOR_VERSION}-openjdk"
+$ export PATH="${JAVA_HOME}/bin:$PATH"
+
+$ export GLASSHFISH_MAJOR_VERSION=${GLASSHFISH_MAJOR_VERSION:-'4'}
+$ export GLASSHFISH_VERSION=${GLASSHFISH_VERSION:-"${GLASSHFISH_MAJOR_VERSION}.1"}
+$ export GLASSFISH_HOME="/usr/local/glassfish-${GLASSHFISH_VERSION}"
+$ export PATH="${GLASSFISH_HOME}/bin:$PATH"
+
+** Enable secure admin
+
+$ asadmin start-domain
+
+$ asadmin change-admin-password
+$ asadmin enable-secure-admin
+$ asadmin restart-domain
+** Start Domain (Debug)
+
+$ asadmin start-domain --debug <domain-name>
+
+UNIX/Linux
+$ jdb -attach 9009
+$ jdb -attach 192.168.122.124:9009
+
+Windows
+PS C:\> jdb -connect com.sun.jdi.SocketAttach:port=9009
+
+Enabling Debugging - Oracle GlassFish Server 3.1 Application Development Guide
+https://docs.oracle.com/cd/E18930_01/html/821-2418/beafd.html
+** glassfish process id
+
+$ ps aux | grep -v grep | grep glassfish
+** Domains
+
+*** List domains
+
+$ asadmin list-domains
+*** Start Domain
+
+$ asadmin start-domain
+$ asadmin list-domains
+
+*** Stop Domain
+
+$ asadmin stop-domain <domainname>
+$ asadmin list-domains
+
+*** Restart Doamin
+
+$ asadmin restart-domain
+$ asadmin list-domains
+
+*** Create Domain
+
+$ asadmin create-domain --portbase <port-number> <domainname>
+
+|-------------------------------------------------+---------------|
+| Service                                         | Port          |
+|-------------------------------------------------+---------------|
+| Admin                                           | portbase + 48 |
+| HTTP                                            | portbase + 80 |
+| Java Messaging System (JMS)                     | portbase + 76 |
+| Internet Inter-ORB Protocol (IIOP)              | portbase + 37 |
+| Secure HTTP (HTTPS)                             | portbase + 81 |
+| Secure IIOP                                     | portbase + 38 |
+| Mutual Authorization IIOP                       | portbase + 39 |
+| Java Management Extensions (JMX) administration | portbase + 86 |
+|-------------------------------------------------+---------------|
+
+*** Delete Domain
+
+$ asadmin delete-domain <domainname>
