@@ -89,8 +89,15 @@ $ ./mysql-build.bash &>/dev/stdout &>${BUILD_LOG}
 
 $ export BUILD_LOG=${HOME}/tmp/logs/docker-build.log
 $ grep 'Step' $BUILD_LOG
+** Containers
+*** View Container IP Address
 
-** Stop and Remove all containers
+docker inspect --format '{{.NetworkSettings.IPAddress}}' <container-name>|<container-id>
+
+Example
+docker inspect --format '{{.NetworkSettings.IPAddress}}' tools-haproxy
+
+*** Stop and Remove all containers
 
 $ docker stop $(docker ps -a -q) | xargs docker rm
 ** Dockerfile
