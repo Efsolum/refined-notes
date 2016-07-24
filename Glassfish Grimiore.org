@@ -2,6 +2,8 @@
 ** Installation
 *** Install Java Alpine
 
+#+BEGIN_EXAMPLE
+
 $ export JAVA_MINOR_VERSION=${JAVA_MINOR_VERSION:-'8'}
 $ export JAVA_VERSION=${JAVA_VERSION:-"1.${JAVA_MINOR_VERSION}"}
 
@@ -12,8 +14,11 @@ $ apk add openjdk${JAVA_MINOR_VERSION} openjdk${JAVA_MINOR_VERSION}-jre
 
 $ which java && java -version
 $ which javac && javac -version
+
+#+END_EXAMPLE
 *** Install Glassfish
 
+#+BEGIN_EXAMPLE
 $ export JAVA_MINOR_VERSION=${JAVA_MINOR_VERSION:-'8'}
 $ export JAVA_VERSION=${JAVA_VERSION:-"1.${JAVA_MINOR_VERSION}"}
 
@@ -36,9 +41,11 @@ $ cd /
 $ rm -vr /tmp/glassfish-build
 
 $ chmod +x ${GLASSFISH_HOME}/bin/*
+#+END_EXAMPLE
 
 ** Environment
 
+#+BEGIN_EXAMPLE
 $ export JAVA_MINOR_VERSION=${JAVA_MINOR_VERSION:-'8'}
 $ export JAVA_VERSION=${JAVA_VERSION:-"1.${JAVA_MINOR_VERSION}"}
 
@@ -49,6 +56,7 @@ $ export GLASSHFISH_MAJOR_VERSION=${GLASSHFISH_MAJOR_VERSION:-'4'}
 $ export GLASSHFISH_VERSION=${GLASSHFISH_VERSION:-"${GLASSHFISH_MAJOR_VERSION}.1"}
 $ export GLASSFISH_HOME="/usr/local/glassfish-${GLASSHFISH_VERSION}"
 $ export PATH="${GLASSFISH_HOME}/bin:$PATH"
+#+END_EXAMPLE
 
 ** Enable secure admin
 
@@ -57,7 +65,15 @@ $ asadmin start-domain
 $ asadmin change-admin-password
 $ asadmin enable-secure-admin
 $ asadmin restart-domain
-** Start Domain (Debug)
+** glassfish process id
+
+$ ps aux | grep -v grep | grep glassfish
+** Domains
+
+*** List domains
+
+$ asadmin list-domains
+*** Start Domain (Debug)
 
 $ asadmin start-domain --debug <domain-name>
 
@@ -70,14 +86,6 @@ PS C:\> jdb -connect com.sun.jdi.SocketAttach:port=9009
 
 Enabling Debugging - Oracle GlassFish Server 3.1 Application Development Guide
 https://docs.oracle.com/cd/E18930_01/html/821-2418/beafd.html
-** glassfish process id
-
-$ ps aux | grep -v grep | grep glassfish
-** Domains
-
-*** List domains
-
-$ asadmin list-domains
 *** Start Domain
 
 $ asadmin start-domain
