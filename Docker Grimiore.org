@@ -17,6 +17,7 @@ $ apt-cache policy docker-engine
 
 $ sudo apt-get install -y docker-engine docker-compose
 $ sudo systemctl start docker
+$ sudo systemctl enable docker
 $ systemctl status docker
 
 # Docker now sets this, but it's here as a reminder to check it.
@@ -92,14 +93,14 @@ $ grep 'Step' $BUILD_LOG
 ** Containers
 *** View Container IP Address
 
-docker inspect --format '{{.NetworkSettings.IPAddress}}' <container-name>|<container-id>
+$ docker inspect --format '{{.NetworkSettings.IPAddress}}' <container-name>|<container-id>
 
 Example
-docker inspect --format '{{.NetworkSettings.IPAddress}}' tools-haproxy
+$ docker inspect --format '{{.NetworkSettings.IPAddress}}' tools-haproxy
 
 *** Stop and Remove all containers
 
-$ docker stop $(docker ps -a -q) | xargs docker rm
+$ docker stop $(docker ps -a -q) | xargs --no-run-if-empty docker rm
 ** Dockerfile
 *** Dockerfile: APK install snippet
 
@@ -166,3 +167,21 @@ RUN rm -rf /var/lib/apt/lists/* \
 
 // macro call
 {{ apt_update() }}
+** Problems & Solutions
+*** Problem: No memory and No swap limit support
+
+# Problem
+docker info | grep WARNING
+
+WARNING: No memory limit support
+WARNING: No swap limit support
+
+# Solution
+
+$ sudo emacs /etc/default/grub
+
+Then update the 'GRUB_CMDLINE_LINUX_DEFAULT' line as follows;
+
+GRUB_CMDLINE_LINUX_DEFAULT="quiet cgroup_enable=memory swapaccount=1"
+
+$ sudo update-grub
