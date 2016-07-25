@@ -1,0 +1,65 @@
+* Linux Grimoire
+** Partition a new disk/drive
+
+$ sudo bash -c 'echo 1 > /sys/block/sdb/device/rescan' ;; recan partitions if needed
+$ lsblk --all
+
+On Debian
+$ sudo apt-get install -y lvm2 parted
+
+On Guix/GuixSD
+$ guix package -i lvm2 parted
+
+On Centos
+$ sudo yum install lvm2*
+
+$ sudo parted -a optimal /dev/sdb
+(parted) unit MiB
+(parted) mklabel gpt
+(parted) mkpart primary 0 -1
+(parted) print
+(parted) quit
+
+$ sudo vgs
+
+$ sudo pvcreate /dev/sdb1
+$ sudo pvs
+
+$ sudo vgcreate projects /dev/sdb1
+$ sudo vgs
+
+$ sudo lvcreate -L 20GiB -n home projects
+$ sudo lvs
+
+$ sudo mkfs.ext4 /dev/projects/home
+
+sources;
+How To Create LVM Using vgcreate, lvcreate, and lvextend lvm2 Commands
+http://www.thegeekstuff.com/2010/08/how-to-create-lvm/
+
+** Networking
+*** Show Virtual Interfaces only
+
+$ ls -l /sys/class/net/ | grep virtual
+*** Show Physical Interfaces only
+
+$ ls -l /sys/class/net/ | grep -v virtual
+*** Internet
+**** Testing internet connectivity
+
+# ping one of the google dns servers
+ping -c 4 8.8.8.8
+**** Obtain external IP address
+
+dig +short myip.opendns.com @resolver1.opendns.com
+
+curl -s checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//'
+
+curl http://ipecho.net/plain; echo
+
+curl -s http://whatismijnip.nl |cut -d " " -f 5
+
+curl -s icanhazip.com
+
+curl -s http://ifconfig.me
+
