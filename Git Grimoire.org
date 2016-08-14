@@ -48,9 +48,53 @@ $ apt-get install git git-doc
 
 Optional
 $ apt-get install git-annex
-** Show config
+** Config variables
+*** Show global config
+
+$ env --unset=GIT_CONFIG git config --list
+*** Show config
 
 $ git config --list
+*** Unset variable
+
+$ git config --unset branch.<branch>.merge
+** Setup/Configure git
+man 1 git-config
+GIT_CONFIG
+Take the configuration from the given file instead of
+.git/config. Using the "--global" option forces this to
+~/.gitconfig. Using the "--system" option forces this to
+$(prefix)/etc/gitconfig.
+
+*** Set Global config options
+
+$ echo "git config --global user.email '<email>' ;\
+git config --global user.name \"<name>\" ;\
+git config --global core.editor 'emacsclient -s projects -c' ;\
+git config --global merge.conflictstyle diff3 ;\
+git config --global color.ui true" | env --unset=GIT_CONFIG bash -s
+
+$ env --unset=GIT_CONFIG bash -c "
+git config --global user.email '<email>' ;\
+git config --global user.name \"<name>\" ;\
+git config --global core.editor 'emacsclient -s projects -c' ;\
+git config --global merge.conflictstyle diff3 ;\
+git config --global color.ui true"
+
+*** Set config options, recipe: 1458256211
+
+$ git config user.email "<email>" ; \
+git config user.name "<name>" ; \
+git config core.editor "emacsclient -s projects -c" ; \
+git config merge.conflictstyle diff3 ; \
+git config color.ui true
+*** Inside docker container, recipe: 1458256222
+
+git config --global user.email "<email>" ; \
+git config --global user.name "<name>" ; \
+git config --global merge.conflictstyle diff3 ; \
+git config --global color.ui true
+
 ** Initialize a new git repo
 
 Create a new directory and initialize it.
@@ -62,3 +106,18 @@ git init
 Using Emacs Dired and Magit
 S-+ <project-name>
 M-x magit-init <project-name>
+** Github
+*** SSH Agent
+
+$ eval "$(ssh-agent -s)"
+
+$ ssh-add -L
+$ ssh-add <key-path>/<private-key> # add key if not in the agent
+$ ssh-add -L
+
+*** Test github ssh connection
+
+$ ssh -T git@github.com
+
+Testing your SSH connection - User Documentation
+https://help.github.com/articles/testing-your-ssh-connection/
