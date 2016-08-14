@@ -49,3 +49,35 @@ mv -v <key> <key>_old
 ssh <username>@<host> [-p <port>]
 sed '/<name of file>$/d' ~/.ssh/authorized_keys
 sed -i '/<name of file>$/d' ~/.ssh/authorized_keys
+** SSH to a machine via another (gateway)
+
+
+$ ssh -t <user1>@<gateway> ssh <user2>@<target>
+
+Example
+$ ssh -t jake@jax.local ssh user@192.168.122.181
+** Disable Root Login
+
+Step 1: Modify Configuration
+
+$ $EDITOR /etc/ssh/sshd_config
+
+Change the following line from
+#PermitRootLogin no
+
+to
+
+PermitRootLogin no
+
+
+Step 2: Restart SSH
+
+restart SSH Daemon
+/etc/init.d/sshd restart
+or
+service sshd restart
+
+Step 3: Test Root Login
+
+ssh root@<server>
+
