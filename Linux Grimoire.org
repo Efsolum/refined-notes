@@ -73,6 +73,17 @@ $ ls -l /sys/class/net/ | grep virtual
 *** Show Physical Interfaces only
 
 $ ls -l /sys/class/net/ | grep -v virtual
+
+*** Change DNS Server
+
+# /etc/resolvconf/resolv.conf.d/base
+nameserver <ip-address>
+nameserver <ip-address>
+
+sudo resolvconf -u
+
+cat /etc/resolv.conf
+
 *** Internet
 **** Testing internet connectivity
 
