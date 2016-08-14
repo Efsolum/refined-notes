@@ -1,11 +1,11 @@
 * Git Grimoire
 ** Install
 
-*** recipe: 1468151265, install with stow (source)
 *** recipe: 1471191405, install with guix
 
 $ guix pull
 $ guix package -i git git-manpages
+*** recipe: 1468151265, source install with stow (2.9.0)
 
 CentOS
 $ sudo yum install -y curl-devel expat-devel gettext-devel \
