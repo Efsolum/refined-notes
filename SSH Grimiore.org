@@ -1,4 +1,11 @@
 * SSH Grimore
+** Installation
+*** recipe 1471207682, install with guix
+
+$ guix pull
+$ guix package -i openssh rsync sshpass sshfs-fuse
+
+$ which ssh && ssh -V
 ** SSH Agent
 
 *** Start ssh agent
