@@ -49,6 +49,24 @@ How To Create LVM Using vgcreate, lvcreate, and lvextend lvm2 Commands
 http://www.thegeekstuff.com/2010/08/how-to-create-lvm/
 
 ** Networking
+*** Hostname
+**** Obtain local system hostname
+
+$ hostnamectl status
+Or
+$ hostname
+**** Set hostname
+
+$ sudo hostnamectl set-hostname <hostname>
+$ sudo reboot
+
+Example
+$ sudo hostnamectl set-hostname test
+$ sudo reboot
+
+References
+How to change the hostname of a Linux system - MDLog:/sysadmin
+http://www.ducea.com/2006/08/07/how-to-change-the-hostname-of-a-linux-system/
 *** Show Virtual Interfaces only
 
 $ ls -l /sys/class/net/ | grep virtual
