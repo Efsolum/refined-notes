@@ -1,0 +1,33 @@
+* DNS Servers
+Notes on availabe DNS Servers
+
+** List
+
+|-------------------+--------------------+----------------------|
+| Provider          | Primary DNS Server | Secondary DNS Server |
+|-------------------+--------------------+----------------------|
+| Level31           |        209.244.0.3 |          209.244.0.4 |
+| Google2           |            8.8.8.8 |              8.8.4.4 |
+| Comodo Secure DNS |         8.26.56.26 |          8.20.247.20 |
+| OpenDNS Home3     |     208.67.222.222 |       208.67.220.220 |
+|-------------------+--------------------+----------------------|
+
+see sources section for more options.
+
+** Google Public DNS
+
+Google Public DNS IP addresses
+
+The Google Public DNS IP addresses (IPv4) are as follows:
+
+    8.8.8.8
+    8.8.4.4
+
+The Google Public DNS IPv6 addresses are as follows:
+
+    2001:4860:4860::8888
+    2001:4860:4860::8844
+
+** Sources
+
+http://pcsupport.about.com/od/tipstricks/a/free-public-dns-servers.htm
