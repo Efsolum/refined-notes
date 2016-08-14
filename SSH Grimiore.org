@@ -1,4 +1,21 @@
 * SSH Grimore
+** SSH Agent
+
+*** Start ssh agent
+
+$ eval "$(ssh-agent -s)"
+*** Add a key
+$ ssh-add <key-path>/<private-key>
+
+*** Set the SSH Agent Socker Location
+This allows for the sharing of an existing ssh-agent
+
+$ export SSH_AGENT_PID=<pid>
+$ export SSH_AUTH_SOCK=<path-to-socker>
+
+Example:
+export SSH_AUTH_SOCK=/tmp/ssh-et1CVxAiXx0n/agent.1453
+
 ** SSH/Key life cycle
 -p port
 Port to connect to on the remote host.  This can be specified on a
