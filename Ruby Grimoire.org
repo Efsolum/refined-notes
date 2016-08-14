@@ -1,0 +1,24 @@
+* Ruby Grimoire
+** Installation
+*** Recipe 1469606844: Install Ruby 2.3.1 with GNU Stow
+
+#+BEGIN_EXAMPLE
+$ wget 'https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz'
+$ sha256sum ruby-2.3.1.tar.gz | grep b87c738cb2032bf4920fef8e3864dc5cf8eae9d89d8d523ce0236945c5797dcd
+$ tar -xf ruby-2.3.1.tar.gz
+
+$ cd ruby-2.3.1
+$ mkdir build
+$ cd build
+
+$ ../configure --prefix=${HOME}/tools/stow/ruby-2.3.1
+$ make
+$ make check
+$ make install
+
+$ cd ${HOME}/tools/stow/
+$ stow -S ruby-2.3.1
+#+END_EXAMPLE
+
+Multiple versions of ruby with stow - mjwall.com
+http://mjwall.com/blog/2008/08/16/multiple-versions-of-ruby-with-stow/
