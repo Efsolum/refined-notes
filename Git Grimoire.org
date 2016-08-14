@@ -171,3 +171,17 @@ $ ssh -T git@github.com
 
 Testing your SSH connection - User Documentation
 https://help.github.com/articles/testing-your-ssh-connection/
+** Problems & Solutions
+*** fatal: refusing to merge unrelated histories
+
+Error
+fatal: refusing to merge unrelated histories
+
+$ git merge \
+--allow-unrelated-histories \
+-m 'merging orgin/master into master.' \
+orgin/master
+
+References
+rebase - Git refusing to merge unrelated histories - Stack Overflow
+http://stackoverflow.com/questions/37937984/git-refusing-to-merge-unrelated-histories
