@@ -150,14 +150,16 @@ git init
 Using Emacs Dired and Magit
 S-+ <project-name>
 M-x magit-init <project-name>
-** Github
+** Remote repos
 *** SSH Agent
 
-$ eval "$(ssh-agent -s)"
+#+BEGIN_EXAMPLE
+	$ eval "$(ssh-agent -s)"
 
-$ ssh-add -L
-$ ssh-add <key-path>/<private-key> # add key if not in the agent
-$ ssh-add -L
+	$ ssh-add -L
+	$ ssh-add <key-path>/<private-key> # add key if not in the agent
+	$ ssh-add -L
+#+END_EXAMPLE
 
 *** Test github ssh connection
 
