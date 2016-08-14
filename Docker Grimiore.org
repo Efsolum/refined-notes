@@ -2,6 +2,7 @@
 ** Installation
 *** Recipe 1466361043: Install docker on debian from apt repo
 
+#+BEGIN_EXAMPLE
 $ sudo apt-get install -y apt-transport-https ca-certificates
 $ sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 \
 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
@@ -31,12 +32,14 @@ $ newgrp docker
 $ docker info
 $ docker version
 $ docker run hello-world
+#+END_EXAMPLE
 
 Source:
 Installation on Debian
 https://docs.docker.com/engine/installation/linux/debian/
 *** Recipe 1466089143: Install docker on centos from docker rpm repo
 
+#+BEGIN_EXAMPLE
 $ sudo yum update
 
 $ sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
@@ -63,6 +66,7 @@ $ newgrp docker
 $ docker info
 $ docker version
 $ sudo docker run hello-world
+#+END_EXAMPLE
 
 Installation on CentOS
 https://docs.docker.com/engine/installation/linux/centos/
@@ -93,29 +97,36 @@ $ grep 'Step' $BUILD_LOG
 ** Containers
 *** View Container IP Address
 
+#+BEGIN_EXAMPLE
 $ docker inspect --format '{{.NetworkSettings.IPAddress}}' <container-name>|<container-id>
 
 Example
 $ docker inspect --format '{{.NetworkSettings.IPAddress}}' tools-haproxy
+#+END_EXAMPLE
 
 *** Stop and Remove all containers
 
+#+BEGIN_EXAMPLE
 $ docker stop $(docker ps -a -q) | xargs --no-run-if-empty docker rm
+#+END_EXAMPLE
 ** Dockerfile
 *** Dockerfile: APK install snippet
-
+#+BEGIN_EXAMPLE
 RUN apk update
 RUN apk add \
 # packages go here \
 && rm -rf /var/cache/apk/*
+#+END_EXAMPLE
 *** Dockerfile: APT install snippet
 
+#+BEGIN_EXAMPLE
 RUN apt-get update
 RUN apt-get install \
 --yes \
 --no-reccommends \
 # packages go here \
 && apt-get clean
+#+END_EXAMPLE
 
 *** copy a directory to docker build
 copy a directory to docker build and not just it's contents.
