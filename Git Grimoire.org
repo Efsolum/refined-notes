@@ -48,6 +48,20 @@ $ apt-get install git git-doc
 
 Optional
 $ apt-get install git-annex
+** Lists
+*** Free git repos
+
+Bitbucket — The Git solution for professional teams
+https://bitbucket.org/
+
+GitLab.com | GitLab
+https://about.gitlab.com/gitlab-com/
+
+Free Git Hosting | Unlimited Repos and Users | Assembla
+https://www.assembla.com/git/
+
+GitHub - Pricing
+https://github.com/pricing
 ** Config variables
 *** Show global config
 
