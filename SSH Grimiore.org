@@ -6,6 +6,227 @@ $ guix pull
 $ guix package -i openssh rsync sshpass sshfs-fuse
 
 $ which ssh && ssh -V
+** config
+
+*** Config Notes
+
+Keychain
+This document describes how to use SSH shared keys along with the
+keychain program. It assumes basic knowledge of public key
+cryptography.
+https://wiki.gentoo.org/wiki/Keychain
+
+man 5 ssh_config
+
+IdentityFile
+...
+The file name may use the tilde syntax to refer to a user's home
+directory or one of the following escape characters: ‘%d’ (local
+user's home directory), ‘%u’ (local user name), ‘%l’ (local host
+name), ‘%h’ (remote host name) or ‘%r’ (remote user name).
+...
+is possible to have multiple identity files specified in configuration
+files; all these identities will be tried in sequence.
+*** config: 1467472232
+
+#+NAME: config
+#+BEGIN_SRC conf
+	Host mail.creativedragon.local
+			 ProxyCommand ssh -q -W 192.168.122.181:22 user@host.local
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/virt/%r_%h_dev_ed25519
+			 IdentityFile ~/.ssh/virt/%r_%h_dev_rsa
+			 IdentityFile ~/.ssh/virt/%r_%h_dev_ecdsa
+			 IdentityFile ~/.ssh/virt/%r_%h_dev_ed25519_old
+			 IdentityFile ~/.ssh/virt/%r_%h_dev_rsa_old
+			 IdentityFile ~/.ssh/virt/%r_%h_dev_ecdsa_old
+			 IdentitiesOnly yes
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+			 ControlPersist 600
+
+	Host *.vagrant
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ed25519
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_rsa
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ecdsa
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ed25519_old
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_rsa_old
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ecdsa_old
+			 IdentitiesOnly yes
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+			 ControlPersist 600
+
+	Host github.com
+			 PreferredAuthentications publickey
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ed25519
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_rsa
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ecdsa
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ed25519_old
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_rsa_old
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ecdsa_old
+			 IdentitiesOnly yes
+
+	Host *
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ed25519
+			 IdentityFile ~/.ssh/main/%r_%h_admin_rsa
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ecdsa
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ed25519_old
+			 IdentityFile ~/.ssh/main/%r_%h_admin_rsa_old
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ecdsa_old
+			 IdentitiesOnly yes
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+			 ControlPersist 600
+
+#+END_SRC
+*** config: 1459184671
+
+
+#+NAME: config
+#+BEGIN_SRC conf
+	Host *.docker
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_ed25519
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_rsa
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_ecdsa
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_ed25519_old
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_rsa_old
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_ecdsa_old
+			 IdentitiesOnly yes
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+			 ControlPersist 600
+
+	Host *.vagrant
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ed25519
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_rsa
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ecdsa
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ed25519_old
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_rsa_old
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ecdsa_old
+			 IdentitiesOnly yes
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+			 ControlPersist 600
+
+	Host github.com
+			 PreferredAuthentications publickey
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ed25519
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_rsa
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ecdsa
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ed25519_old
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_rsa_old
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ecdsa_old
+			 IdentitiesOnly yes
+			 # ControlMaster auto
+			 # ControlPath ~/.ssh/sockets/%r@%h:%p
+			 # ControlPersist 600
+
+	Host *
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ed25519
+			 IdentityFile ~/.ssh/main/%r_%h_admin_rsa
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ecdsa
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ed25519_old
+			 IdentityFile ~/.ssh/main/%r_%h_admin_rsa_old
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ecdsa_old
+			 IdentitiesOnly yes
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+			 ControlPersist 600
+#+END_SRC
+*** config: 1457563031
+
+#+NAME: config
+#+BEGIN_SRC conf
+
+	Match user *docker*
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_ed25519
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_rsa
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_ecdsa
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_ed25519_old
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_rsa_old
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_ecdsa_old
+			 IdentitiesOnly yes
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+			 ControlPersist 600
+
+	Match user *vagrant*
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ed25519
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_rsa
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ecdsa
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ed25519_old
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_rsa_old
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ecdsa_old
+			 IdentitiesOnly yes
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+			 ControlPersist 600
+
+	Host github.com
+			 PreferredAuthentications publickey
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ed25519
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_rsa
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ecdsa
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ed25519_old
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_rsa_old
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ecdsa_old
+			 IdentitiesOnly yes
+			 # ControlMaster auto
+			 # ControlPath ~/.ssh/sockets/%r@%h:%p
+			 # ControlPersist 600
+
+	Host *
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ed25519
+			 IdentityFile ~/.ssh/main/%r_%h_admin_rsa
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ecdsa
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ed25519_old
+			 IdentityFile ~/.ssh/main/%r_%h_admin_rsa_old
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ecdsa_old
+			 IdentitiesOnly yes
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+			 ControlPersist 600
+#+END_SRC
+
+*** config: 1457540538
+
+#+NAME: config
+#+BEGIN_SRC conf
+	Match user *docker*
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/docker/%r_%h_dev_ecdsa
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+
+	Match user *vagrant*
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/vagrant/%r_%h_dev_ecdsa
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+
+	Host github.com
+			 PreferredAuthentications publickey
+			 IdentityFile ~/.ssh/repo/%r_%h_dev_ecdsa
+			 # ControlMaster auto
+			 # ControlPath ~/.ssh/sockets/%r@%h:%p
+
+	Host *
+			 PreferredAuthentications publickey,password
+			 IdentityFile ~/.ssh/main/%r_%h_admin_ecdsa
+			 ControlMaster auto
+			 ControlPath ~/.ssh/sockets/%r@%h:%p
+
+#+END_SRC
+
 ** SSH Agent
 
 *** Start ssh agent
@@ -87,4 +308,3 @@ service sshd restart
 Step 3: Test Root Login
 
 ssh root@<server>
-
