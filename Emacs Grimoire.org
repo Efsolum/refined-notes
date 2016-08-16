@@ -1,5 +1,6 @@
 
 * Emacs Grimiore
+
 ** Installation
 *** Recipe: 1468489569, Installing emacs 24.5
 
@@ -45,4 +46,117 @@ emacs24-common-non-dfsg
 
 Optional
 apt-get install -y ack-grep silversearcher-ag ctags jsonlint python-rope
+** Start (client/daemon)
+
+*** Start emacs without init/config directory
+
+-q, --no-init-file
+Do not load an init file.
+
+GUI
+emacs -q
+
+CLI
+emacs -nw -q
+*** Standalone
+
+GUI
+emacs
+
+CLI
+emacs -nw
+*** Daemon & Client
+
+**** Client
+-s --socket-name
+-c --create-frame
+-t -nw --tty
+
+GUI
+emacsclient -c
+emacsclient -s <server-name> -c
+
+CLI
+emacsclient -t
+emacsclient -s <server-name> -t
+**** Server
+***** Start
+
+Start Daemon/Server
+$ emacs --daemon
+
+# Start Daemon/Server
+$ emacs --daemon=<server-name> [-q|--no-init-file]
+
+$ export EDITOR='emacsclient -s <server-name> -t'
+$ export VISUAL='emacsclient -s <server-name> -c'
+
+# Examples
+$ emacs --daemon=default &> /dev/null &
+$ emacs --daemon=projects &> /dev/null &
+
+***** Stop
+Stop Daemon/Server
+
+# Note
+# Save files before using.
+$ emacsclient -e '(kill-emacs)'
+
+# Stop Daemon/Server
+# Save files before using.
+$ emacsclient -s <server-name> -e '(kill-emacs)'
+
+Examples
+$ emacsclient -s projects -e '(kill-emacs)'
+
+*** With Dired
+
+emacsclient -s projects -c --eval '(dired "~/Downloads")'
+
+*** With Ediff
+
+emacsclient -s projects -c \
+--eval '(ediff-merge-files-with-ancestor "hello.1.txt" "hello.2.txt" "hello.orig.txt" nil "hello.merged.txt")'
+
+emacs -q \
+--eval '(ediff-merge-files-with-ancestor "hello.1.txt" "hello.2.txt" "hello.orig.txt" nil "hello.merged.txt")'
+** Environment
+
+*** Preferred environment variables
+
+(setq exec-path-from-shell-variables
+			'("PATH" "MANPATH" "INFOPATH" "GNUPGHOME" "SSH_AGENT_PID" "SSH_AUTH_SOCK"))
+(exec-path-from-shell-initialize)
+(setenv "SSH_AGENT_PID" "1667")
+(setenv "SSH_AUTH_SOCK" "/tmp/ssh-VrcH5sQnGTmj/agent.1642")
+
+*** Update a specific environment variable from a new shell instance
+M-x exec-path-from-shell-copy-env
+Set the environment variable $NAME from the user's shell.
+
+*** Synchronize environment variables with a new shell instance
+
+;; evaluate the following, and update with addtional variables if needed
+(setq exec-path-from-shell-variables
+			'("PATH" "MANPATH" "GNUPGHOME" "SSH_AGENT_PID" "SSH_AUTH_SOCK"))
+
+M-x exec-path-from-shell-initialize
+Initialize environment from the user's shell.
+
+*** Show the initieal environment
+
+C-h v initial-environment
+*** Show the current environment
+
+C-h v process-environment
+*** Get environment variable
+M-x getenv
+
+*** Set environment variable
+
+M-x setenv
+
+*** Remove environment variable
+
+C-u M-x setenv
 
