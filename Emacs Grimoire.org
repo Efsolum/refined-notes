@@ -1,4 +1,3 @@
-
 * Emacs Grimiore
 
 ** Installation
@@ -120,6 +119,7 @@ emacsclient -s projects -c \
 
 emacs -q \
 --eval '(ediff-merge-files-with-ancestor "hello.1.txt" "hello.2.txt" "hello.orig.txt" nil "hello.merged.txt")'
+
 ** Environment
 
 *** Preferred environment variables
@@ -159,4 +159,456 @@ M-x setenv
 *** Remove environment variable
 
 C-u M-x setenv
+** Project Management
+*** Cache
 
+C-c p i
+projectile-invalidate-cache
+	 Remove the current project's files from
+	 `projectile-projects-cache'.
+
+**** Clean Up non-existent projects
+
+M-x projectile-cleanup-known-projects
+	 Remove known projects that don't exist anymore.
+*** Save all files in project
+
+projectile-save-project-buffers	C-c p S
+	 Save all project buffers.
+
+*** Close another project
+*** Close current project
+
+C-c p k
+projectile-kill-buffers
+Kill all project buffers.
+
+projectile-remove-known-project
+	 Remove PROJECT from the list of known projects.
+
+*** Cleanup
+
+M-x projectile-cleanup-known-projects
+*** Magit 2.x
+**** Popups
+***** General
+!								magit-run-popup
+?								magit-dispatch-popup
+A								magit-cherry-pick-popup
+B								magit-bisect-popup
+D								magit-diff-refresh-popup
+T								magit-notes-popup
+V								magit-revert-popup
+W								magit-patch-popup
+Z								magit-stash-popup
+b								magit-branch-popup
+c								magit-commit-popup
+f								magit-fetch-popup
+h								magit-dispatch-popup
+l								magit-log-popup
+m								magit-merge-popup
+o								magit-submodule-popup
+r								magit-rebase-popup
+t								magit-tag-popup
+w								magit-am-popup
+y								magit-show-refs-popup
+z								magit-stash-popup
+s-r							makey-key-mode-popup-projectile-rails-mode
+C-x r						makey-key-mode-popup-rectangles
+M-s							makey-key-mode-popup-isearch
+C-c C-c					magit-dispatch-popup
+C-c C-e					magit-dispatch-popup
+s-r							makey-key-mode-popup-projectile-rails-mode
+C-x r						makey-key-mode-popup-rectangles
+M-s							makey-key-mode-popup-isearch
+***** Remotes
+
+| F | magit-pull-popup   |
+| M | magit-remote-popup |
+| P | magit-push-popup   |
+
+***** Diffs
+
+| d | magit-diff-popup  |
+| E | magit-ediff-popup |
+**** Staging
+***** Select Hunk
+
+C-<space>
+
+then select region of interest.
+
+s
+***** Split Hucnk
+
++		magit-diff-more-context
+-		magit-diff-less-context
+0		magit-diff-default-context
+
+**** Stop Tracking a file and upadte .gitignore
+
+M-x magit-status
+i
+**** Stop Tracking a file
+
+M-x magit-status
+: rm --cached <path-to-file>
+
+*** Magit 1.x
+**** View magit process buffer
+
+$
+M-x magit-process
+**** Kill git process
+
+k
+M-x magit-process-kill
+**** Initialize Git Repository
+
+M-x magit-init
+	 Create or reinitialize a Git repository.
+**** Open/view Git Status
+
+M-x magit-status
+	 Open a Magit status buffer for the Git repository containing DIR.
+
+**** Resetting/Reverting
+***** Reset current HEAD to a revision
+
+M-x magit-status
+x
+***** Reset working tree and staging area to recent Head
+
+M-x magit-status
+X
+
+**** Branch Manager
+***** Delete a Branch
+
+# Move to branch (C-n or C-p)
+k
+
+***** Delete a Branch (Force)
+
+# Move to branch (C-n or C-p)
+C-u k
+
+***** List Branches
+
+M-x magit-branch-manager
+	 Show a list of branches in a dedicated buffer.
+
+***** Create a branch
+
+In the branch manager
+b -> c
+**** Stash
+stash popup menu
+
+M-x magit-status
+z
+**** Display Magit process buffer.
+$
+M-x magit-process
+Display Magit process buffer.
+
+**** Diffing
+***** Diff Working Tree with HEAD
+
+in Magit Mode
+d
+magit-diff-working-tree
+
+***** Diff Index/Staging and HEAD
+
+magit-diff-staged
+Show differences between the index and the HEAD commit.
+
+***** Diff Working Tree with Index/Staging
+
+magit-diff-unstaged
+Show differences between the current working tree and index.
+***** Diff Working Tree with Stash
+
+M-x magit-diff-stash
+	 Show changes in a stash.
+
+
+** Navigation
+
+*** Dired
+**** Change the file sizes to a human readable form
+
+(setq dired-listing-switches "-alh")
+**** Rename multiple files
+
+M-x dired
+M-x dired-toggle-read-only
+
+# edit the buffer as normal
+
+C-c C-c
+to commit the changes
+
+C-c C-k
+to abort the changes
+
+**** Kill all Dired buffers
+M-x ibuffer
+'* M' - Mark buffers by major mode.
+'D' - Kill the marked buffers.
+
+**** Mark all file in directory/subdirectory
+
+ * s
+M-x makey-key-mode-popup-dired-marking <enter> s
+**** Mark Files that match a pattern
+
+% m
+M-x dired-mark-files-regexp
+
+# Example regex
+
+.+\.\(mp3\|m3u\|flac\)$
+.+\.\(bmp\|tif\|jpg\|jpeg\|gif\|png\|psd\)$
+.+\.\(eps\|svg\|ai\)$
+.+\.\(ttf\|otf\|woff\|woff2\|eot\)$
+.+\.\(pdf\|ps\|epub\|azw3\|mobi\|djvu\|chm\|doc\|djv\|dvi\)$
+.+\.\(cbr\)$
+.+\.\(txt\)$
+.+\.\(iso\|box\)$
+**** Hide subdirectory viewed in current buffer
+
+$
+M-x dired-hide-subdir
+**** View subdirectory in the current buffer
+
+i		dired-maybe-insert-subdir
+**** Close subdirectory in the current buffer
+
+Move the cusor to the subdirectory path line.
+C-u k
+*** Tree View
+
+direx:jump-to-directory
+direx-project:jump-to-project-root
+
+*** Registers
+
+C-x r C-@, C-x r C-SPC, C-x r SPC
+point-to-register
+	 Store current location of point in register REGISTER.
+
+C-x r j
+jump-to-register
+	 Move point to location stored in a register.
+
+*** Between Projects
+
+projectile-switch-project C-c p p
+	 Switch to a project we have visited before.
+
+C-c p F
+M-x helm-projectile-find-file-in-known-projects
+
+M-x helm-projectile-all
+	 Use projectile with Helm for finding files in all projects.
+
+*** Directories
+
+C-x C-j
+dired-jump
+	 Jump to Dired buffer corresponding to current buffer.
+
+C-c p D
+projectile-dired
+	 Open `dired' at the root of the project.
+
+C-x 4 C-j
+dired-jump-other-window
+	 Like \[dired-jump] (`dired-jump') but in other window.
+
+M-x ag-dired
+	 Recursively find files in DIR matching PATTERN.
+
+M-x ag-dired-regexp
+	 Recursively find files in DIR matching REGEXP.
+
+C-c p d
+projectile-find-dir
+	 Jump to a project's directory using completion.
+
+C-c p 4 d
+projectile-find-dir-other-window
+	 Jump to a project's directory in other window using completion.
+
+C-c p D
+projectile-dired
+	 Open `dired' at the root of the project.
+
+*** Dired
+# In dired mode
+
+t dired-toggle-marks
+*** Within a file
+
+**** Line
+
+C-a, <home>
+move-beginning-of-line
+
+C-e, <end>
+move-end-of-line
+
+C-p, <up>
+previous-line
+
+C-n, <down>
+next-line
+
+C-f
+forward-char
+
+C-b
+backward-char
+
+M-f
+forward-word
+
+M-b
+backward-word
+
+**** Screen
+
+C-l
+recenter-top-bottom
+Move current buffer line to the specified window line.
+
+C-v
+scroll-up-command
+
+M-v
+scroll-down-command
+
+M-<
+beginning-of-buffer
+
+M->
+end-of-buffer
+
+**** Jumping
+
+M-g g
+M-g M-g
+M-x goto-line
+Go to LINE, counting from line 1 at beginning of buffer.
+
+M-x helm-imenu
+Preconfigured `helm' for `imenu'.
+
+M-x ace-jump-char-mode
+	 AceJump char mode
+
+M-x ace-jump-line-mode
+	 AceJump line mode.
+
+**** Searching
+
+M-x helm-swoop
+search and jump
+
+M-p
+(While Searching)
+select previous search string
+
+M-n
+(While Searching)
+select next later search string
+
+C-s
+M-x isearch-forward
+Do incremental search forward.
+
+C-r
+M-x isearch-backward
+Do incremental search backward.
+
+C-M-r
+M-x isearch-backward-regexp
+Do incremental search backward for regular expression.
+
+C-M-s
+M-x isearch-forward-regexp
+Do incremental search forward for regular expression.
+
+C-s Enter C-w word-search-forward
+Search forward from point for STRING, ignoring differences in punctuation.
+
+C-r Enter C-w word-search-backward
+Search backward from point for STRING, ignoring differences in punctuation.
+
+*** Accross muliple buffers
+
+**** By name
+
+C-c p b
+helm-projectile-switch-to-buffer
+**** By searching contents
+
+C-c p s g
+M-x helm-projectile-grep
+Helm version of `projectile-grep'.
+
+M-x projectile-grep
+Perform rgrep in the project.
+
+M-x helm-multi-swoop
+search and jump
+
+M-x helm-buffer-run-grep
+Run Grep action from `helm-source-buffers-list'.
+
+*** Across multiple files
+
+**** By name
+
+helm-projectile C-c p h
+	 Use projectile with Helm instead of ido.
+
+helm-recentf C-x c C-c f
+	 Preconfigured `helm' for `recentf'.
+
+C-c p f
+projectile-find-file
+	 Jump to a project's file using completion.
+
+helm-git-files
+	 `helm' for opening files managed by Git.
+
+**** By searching contents
+
+M-x helm-git-grep
+	 Helm git grep.
+
+M-x rgrep
+	 Recursively grep for REGEXP in FILES in directory tree rooted at
+	 DIR.
+
+C-c p s g
+M-x projectile-grep
+	 Perform rgrep in the project.
+
+C-c p s g
+M-x helm-projectile-grep
+	 Helm version of projectile-grep.
+
+C-c p s s
+M-x helm-projectile-ag
+Search using ag
+
+C-c p s a
+M-x helm-projectile-ack
+Search using ack
+
+projectile-ack C-c p s a
+	 Run an ack search with REGEXP in the project.
