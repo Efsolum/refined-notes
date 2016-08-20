@@ -143,4 +143,226 @@ source $HOME/.bashrc
 exit
 
 sudo bash -c 'guix archive --authorize < ~root/.guix-profile/share/guix/hydra.gnu.org.pub'
+** Package development
+
+*** Imports
+
+$ guix import elpa --archive=melpa-stable helm-ag
+*** Commit message example
+
+#+BEGIN_EXAMPLE
+gnu: Add emacs-helm.
+
+ * gnu/packages/emacs.scm (emacs-helm): New variable.
+#+END_EXAMPLE
+*** Development environment
+
+$ guix environment guix --ad-hoc help2man git strace
+$ eval `guix environment guix --ad-hoc --search-paths help2man git strace`
+
+$ unset GUIX_PACKAGE_PATH
+$ export GUIX_BUILD_OPTIONS="--keep-failed --verbosity=3"
+$ export BUILD_LOG=${HOME}/tmp/logs/pre-guix-build.log
+
+Inital setup
+$ mkdir -p $(dirname ${BUILD_LOG})
+$ git clone --recurse git://git.savannah.gnu.org/guix.git
+
+Update
+$ git pull --recurse-submodules
+
+Git config
+$ git config user.email "<email>"; \
+git config user.name "<name>"; \
+git config core.editor "emacsclient -s projects -c"; \
+git config merge.conflictstyle diff3; \
+git config color.ui true
+
+Build
+$ make clean
+$ ./bootstrap
+$ ./configure --localstatedir=/var
+$ make
+$ make check
+
+Runs in the foreground
+#optional unless editing daemon code
+$ sudo ./pre-inst-env guix-daemon --build-users-group=guixbuild
+
+$ ./pre-inst-env guix build hello &>/dev/stdout &>${BUILD_LOG}
+$ ./pre-inst-env guix lint hello
+
+guix archive --authorize hydra.gnu.org.pub
+
+sources
+https://github.com/pjotrp/guix-notes/blob/master/INSTALL.org#building-guix-from-source
+*** Stop the build a particular point
+
+(add-after 'build 'fail #f)
+*** REPL
+REPL server
+$ ./pre-inst-env guile --listen
+M-x geiser-connect
+
+
+REPL CLI
+$ ./pre-inst-env guile
+
+Packages to load
+> ,use (guix)
+> ,use (guix build-system)
+> ,use (guix build utils)
+
+*** Clean up temporary build directories & files
+
+$ sudo rm -rf /tmp/guix-build-*
+
+** Command Line Interface (CLI)
+*** Download the latest Guix source code and package descriptions
+
+$ sudo guix pull && guix pull
+To update that distribution, along with the Guix tools, you must run
+guix pull: the command downloads the latest Guix source code and
+package descriptions, and deploys it.
+*** collect all garbage
+
+guix gc
+*** version info
+
+guix --version
+*** profile space utilization
+
+guix size <package>
+*** package subcommand
+**** show package search paths
+syntax is:
+guix package options
+
+--search-paths[=kind]
+Report environment variable definitions, in Bash syntax, that may be
+needed in order to use the set of installed packages. These
+environment variables are used to specify search paths for files used
+by some of the installed packages.
+
+**** profiles, manifest and install from files
+syntax is:
+guix package options
+
+--profile=profile
+-p profile
+Use profile instead of the user’s default profile.
+
+--manifest=file
+-m file
+Create a new generation of the profile from the manifest object
+-returned by the Scheme code in file.
+
+--install-from-file=file
+-f file
+Install the package that the code within file evaluates to.
+**** search, show or list package(s)
+syntax is:
+guix package options
+
+--search=regexp
+-s regexp
+List the available packages whose name, synopsis, or description
+matches regexp. Print all the metadata of matching packages in
+recutils format (see GNU recutils manual).
+
+--show=<package>
+Show details about package, taken from the list of available packages,
+in recutils format (see GNU recutils manual).
+
+-I [regexp]
+--list-installed[=regexp]
+List the currently installed packages in the specified profile, with
+-the most re- cently installed packages shown last. When regexp is
+-specified, list only installed packages whose name matches regexp.
+
+# examples
+guix package -s '^go' | recsel -p name,version,synopsis,homepage,location
+guix package -s '^diff' | recsel -p name
+guix package -s "" | recsel -p name -e 'license ~ "LGPL 3"'
+**** install, remove, or upgrade a package
+syntax is:
+guix package options
+
+Primarily, options specifies the operations to be performed during the
+transaction. Upon completion, a new profile is created, but previous
+generations of the profile remain available, should the user want to
+roll back.  For example, to remove lua and install guile and
+guile-cairo in a single transaction:
+
+guix package -r lua -i guile guile-cairo
+
+--install=package
+-i package
+Install the specified packages
+
+--remove=package
+-r package
+Remove the specified packages.
+
+--upgrade[=regexp ...]
+-u [regexp ...]
+Upgrade all the installed packages. If one or more regexps are
+specified, upgrade only installed packages whose name matches a
+regexp.
+
+--do-not-upgrade[=regexp ...]
+When used together with the --upgrade option, do not upgrade any
+packages whose name matches a regexp.
+**** generations and rollback
+syntax is:
+guix package options
+
+--rollback
+Roll back to the previous generation of the profile—i.e., undo the
+last transac- tion.  When combined with options such as --install,
+roll back occurs before any other actions.
+
+--list-generations[=pattern]
+-l [pattern]
+Return a list of generations along with their creation dates; for each
+-generation, show the installed packages, with the most recently
+-installed packages shown last. Note that the zeroth generation is
+-never shown.
+
+--switch-generation=pattern
+-S pattern
+Switch to a particular generation defined by pattern.  pattern may be
+-either a generation number or a number prefixed with “+” or “-”. The
+-latter means: move forward/backward by a specified number of
+-generations.
+
+--delete-generations[=pattern]
+-d [pattern]
+When pattern is omitted, delete all generations except the current
+-one.  This command accepts the same patterns as
+---list-generations. When pat- tern is specified, delete the matching
+-generations. When pattern specifies a duration, generations older
+-than the specified duration match. For instance,
+--delete-generations=1m deletes generations that are more than one
+-month
+
+**** Clean up
+
+$ guix pull
+$ guix package --list-generations | less
+
+Delete genrations older than 20 days.
+$ guix package --delete-generations=20d
+
+Garbage collect up to 4GiB
+$ guix gc -C 4GiB
+
+*** system subcommand
+**** update system
+
+$ sudo guix pull
+$ sudo guix system reconfigure /etc/guix-system-1466872292/config.scm
+**** list system generations
+
+$ sudo guix system list-generations | less
 
