@@ -1,0 +1,19 @@
+* Tmux Grimoire
+** Installation
+*** Recipe 1472306276: Installing tmux 2.2 (with stow)
+
+Releases: https://github.com/tmux/tmux/releases/
+
+$ wget https://github.com/tmux/tmux/releases/download/2.2/tmux-2.2.tar.gz
+$ $ tar -xzf tmux-2.2.tar.gz
+
+$ sudo apt-get install -y libevent-dev
+$ ./configure --prefix=$HOME/tools
+$ make
+$ make install prefix=$HOME/tools/stow/tmux-2.2
+
+$ cd ~/tools/stow
+$ stow -S tmux-2.2
+
+$ cd ~/
+$ which tmux && tmux -V
