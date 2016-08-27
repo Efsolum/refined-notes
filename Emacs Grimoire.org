@@ -45,6 +45,41 @@ emacs24-common-non-dfsg
 
 Optional
 apt-get install -y ack-grep silversearcher-ag ctags jsonlint python-rope
+** Systemd
+
+Start Command
+$ systemctl --user start emacsd@<instance-name>
+
+Paths
+~/.config/systemd/user/emacsd@.service
+~/.config/systemd/environ/emacsd.env
+
+#+NAME: emacsd@.service
+#+BEGIN_SRC systemd
+	[Unit]
+	Description=Emacs: the extensible, self-documenting text editor
+
+	[Service]
+	Type=forking
+	EnvironmentFile=%h/.config/systemd/environ/emacsd.env
+	SyslogIdentifier=Emacs Daemon
+	ExecStart=/usr/bin/env emacs --daemon=%i
+	ExecStop=/usr/bin/env emacsclient --socket-name %i \
+												--eval "(progn (setq kill-emacs-hook 'nil) (kill-emacs))"
+	# Environment=SSH_AUTH_SOCK=%t/keyring/ssh
+	Restart=always
+	TimeoutStartSec=0
+
+	[Install]
+	WantedBy=multi-user.target
+#+END_SRC
+
+#+NAME: emacsd.env
+#+BEGIN_SRC fundamental
+
+	PATH='/home/matthew/tools/share/zsh-user-customizations/zplug/zplug/bin:/home/matthew/tools/bin:/home/matthew/tools/sbin:/home/matthew/.zconfig/zplug/bin:/home/matthew/bin:/usr/local/bin:/usr/bin:/bin'
+
+#+END_SRC
 ** Start (client/daemon)
 
 *** Start emacs without init/config directory
@@ -332,7 +367,6 @@ Show differences between the current working tree and index.
 
 M-x magit-diff-stash
 	 Show changes in a stash.
-
 
 ** Navigation
 
