@@ -1,0 +1,148 @@
+* Python Grimoire
+** Installation
+*** Recipe 1: Install the latest version of pip
+wget https://bootstrap.pypa.io/ez_setup.py -O - | python
+easy_install pip
+pip install yolk
+
+*** Recipe 2: Install pip from the apt repositories
+
+apt-get install python-pip
+pip install yolk
+*** Recipe: 1457324353, Install Pyenv globally
+
+apt-get install -y build-essential curl make wget
+apt-get install -y libbz2-dev libreadline-dev libsqlite3-dev libssl-dev zlib1g-dev
+
+export PYENV_ROOT=/usr/local/pyenv
+
+curl -L \
+https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | \
+sudo -E bash
+
+groupadd pyenv 
+usermod -a -G pyenv <user>
+chown --recursive :pyenv $PYENV_ROOT
+chmod --recursive ug=rwx $PYENV_ROOT
+
+# Update relevant user's bashrc
+export PYENV_ROOT=/usr/local/pyenv
+export PATH="$PYENV_ROOT/bin:$PATH" 
+eval "$(pyenv init -)" 
+eval "$(pyenv virtualenv-init -)"
+
+su - <user> or logout
+source /etc/profile && source $HOME/.bash_profile
+*** Recipie 1: Install latest version with pyenv
+
+pyenv install --list
+pyenv install <python-version>
+pyenv global <python-version>
+pyenv virtualenv production-v<num>
+
+Example:
+pyenv install --list
+pyenv install 2.7.9
+pyenv global 2.7.9
+pyenv virtualenv production-v1
+
+Optional:
+# install Yolk to list available remote versions of packages.
+pyenv activate production-v<num>
+pip install yolk
+
+*** Recipie 2: Install python from APT reposistories
+
+apt-get install python
+
+** Tools
+*** Pyenv
+**** Install a Python version
+
+pyenv install <python-version>
+**** Update
+
+pyenv update
+**** Uninstall
+
+rm -rf $PYENV_ROOT
+**** Set Project version
+set the project .python-version file
+
+pyenv local <virtualenv or version>
+**** Uninstall a Python version
+
+pyenv uninstall <project>
+**** Set the global Python version
+
+pyenv global <version>
+
+**** View the python version in use
+
+pyenv version
+
+**** List
+***** List installed versions
+
+pyenv versions
+***** List remote Python versions
+
+pyenv install --list
+**** Virtualenv Related
+***** Create a virtualenv for the current python version
+
+pyenv virtualenv <project>
+***** Create a virtualenv for a different python version
+
+pyenv virtualenv <python-version> <project>
+
+Example:
+pyenv virtualenv 2.7.9 project
+***** Delete a virtualenv
+
+pyenv uninstall <project>
+***** Activate virtualenv
+
+pyenv activate <project>
+***** Deactivate virtualenv
+
+pyenv deactivate
+***** List all virtualenvs
+
+pyenv virtualenvs
+
+*** Pip
+**** Upgrade
+
+pip install -U pip
+**** Commands Summary
+
+Install a package
+pip install <package>
+
+Show installed files
+pip show --files <package>
+
+List outdated packages
+pip list --outdated
+
+Upgrade a package
+pip install --upgrade <package>
+
+Uninstall a package
+pip unistall <package>
+**** Search for a package
+
+pip search <query>
+**** Show available versions of a package
+
+yolk -V <package-name>
+
+** Programming
+*** Decode url
+python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])" \
+'<url>'
+
+# Example
+python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])" \
+'file:///media/Erudite/Imported/Unknown/Untitled%20(9265)/Untitled%20-%20Unknown.pdf'
