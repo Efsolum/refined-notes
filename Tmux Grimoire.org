@@ -1,19 +1,238 @@
 * Tmux Grimoire
 ** Installation
+
 *** Recipe 1472306276: Installing tmux 2.2 (with stow)
 
 Releases: https://github.com/tmux/tmux/releases/
 
-$ wget https://github.com/tmux/tmux/releases/download/2.2/tmux-2.2.tar.gz
-$ $ tar -xzf tmux-2.2.tar.gz
+Debian
+$ sudo apt-get install -y libevent-dev m4
 
-$ sudo apt-get install -y libevent-dev
+Centos
+$ sudo yum install -y libevent-devel m4
+
+$ export tmux_version='2.2'
+
+$ mkdir -pv ~/tmp/tmux-$(date +%s)
+$ cd ~/tmp/tmux-
+
+$ wget "https://github.com/tmux/tmux/releases/download/${tmux_version}/tmux-${tmux_version}.tar.gz"
+$ tar -xzf tmux-${tmux_version}.tar.gz
+
+$ cd tmux-${tmux_version}
 $ ./configure --prefix=$HOME/tools
 $ make
-$ make install prefix=$HOME/tools/stow/tmux-2.2
+$ make install prefix=$HOME/tools/stow/tmux-${tmux_version}
 
 $ cd ~/tools/stow
-$ stow -S tmux-2.2
+$ stow -S tmux-${tmux_version}
 
 $ cd ~/
 $ which tmux && tmux -V
+*** Install tmux with additional utilies,  recipe: 1457532335
+
+apt-get install -y tmux reptyr xsel powerline
+
+# Check installation
+tmux -V
+** Respawn a range of panes
+
+$ for p in {0..5}; do
+tmux respawn-pane -kt "1.$p"
+done
+** Run a command in a new window and remain on exit
+$ tmux neww -n <window-name> '<command>'
+$ tmux set-window-option -t <target-window> remain-on-exit on
+
+Example
+$ tmux neww -n Xpra 'xpra attach ssh:matthew@creativedragon.local:100'
+$ tmux set-window-option -t 6 remain-on-exit on
+** Buffer Related
+*** Clipboard
+
+# Copy clipboard to buffer
+tmux setb "$(xsel -ob)"
+tmux set-buffer "$(xsel -ob)"
+
+# Copy buffer to clipboard
+tmux showb | xsel -ib
+tmux show-buffer | xsel -ib
+
+# Paste from clibpoard
+tmux setb "$(xsel -ob)" && tmux pasteb
+tmux set-buffer "$(xsel -ob)" && tmux paste-buffer
+
+*** List buffers
+
+PREFIX : lsb
+PREFIX : list-buffers
+
+*** Choose/Select buffer
+
+= choose-buffer
+PREFIX : choose-buffer
+*** View the contents of a buffer
+
+PREFIX : showb
+PREFIX : show-buffer
+*** Set the contents of a buffer
+
+PREFIX : setb
+PREFIX : set-buffer
+*** Paste the contents of a buffer
+
+] paste-buffer
+PREFIX : paste-buffer
+*** Load the cotents of buffer from path
+
+PREFIX : loadb
+PREFIX : load-buffer
+*** Save the contents of a buffer to path
+
+
+PREFIX : saveb
+PREFIX : save-buffer
+*** Delete buffer
+
+PREFIX : deleteb
+PREFIX : delete-buffer
+** Pane Related
+*** Respawn/Restart a pane
+
+respawn-pane -k -t <pane-num>
+
+# example
+respawn-pane -k -t 1 
+
+*** Pipe a pane
+
+# example
+tmux pipe-pane -t 0.0 -o 'cat >> ~/tmux-test.log'
+*** Synchronize Panes
+
+C-b :
+setw synchronize-panes
+*** Display pane indexes
+
+C-b q
+*** Switch to last used pane
+
+C-b ;
+C-b : last-pane
+*** Switch Panes
+
+C-b o
+*** Swap Panes
+
+{
+Swap the current pane with the previous pane.
+
+}
+Swap the current pane with the next pane.
+
+C-b : swap-pane
+-t <dst-pane>
+
+*** Fullscreen/Maximize current pane
+
+C-b z
+C-b : resize-pane -Z
+*** Capture the output of a pane
+
+C-b : capture-pane
+*** Enter copy mode or scroll previous output
+C-b [
+C-b : copy-mode
+*** Break a pane into a seperate window
+
+C-b !
+C-b break-pane
+*** Join pane into a window
+
+C-b : join-pane -s <source_window> -t <target_window>
+*** Rotate Panes
+
+C-b } clockwise
+C-b { counterclockwise
+*** Change Pane Layouts
+
+C-b <space>
+*** Kill current pane
+
+C-b x
+** Window Related
+*** Window Navigation
+
+C-b <n>
+Navigate to window by number
+
+C-b p 
+C-b : previous-window
+
+C-b n 
+C-b : next-window
+*** Window list
+
+C-b w
+C-b : choose-window
+*** Rename Window
+
+C-b ,
+Rename the current window.
+
+C-b : rename-window <new-name>
+
+# Options:
+-t <target-window>
+*** Kill Window
+
+C-b : kill-window
+*** Find a Window
+
+C-b f
+C-b : find-window
+*** Rename current window
+
+C-b ,
+** Session Related
+*** Switch between active sessions
+
+C-b L
+C-b : switch-client -l
+
+C-b (
+C-b : previous-session
+
+C-b )
+C-b : next-session
+*** List sessions
+
+PREFIX s
+PREFIX : ls
+PREFIX : list-sessions
+*** Rename Current Session
+
+C-b $
+*** Kill session
+
+C-b : kill-session
+*** Kill all sessions
+kill all but the last active session
+
+tmux kill-session -a
+
+** Miscellenaous
+*** Obtain the layouts for all windows in a session
+
+tmux list-windows -F '#{window_name}: #{window_layout}' -t lookandfeel
+*** Reload/Load config file
+
+C-b : source-file <path-to-config>
+*** Redraw tmux screen
+Force redraw of the attached client.
+
+C-b r
+
+*** Show previous status bar messages
+
+C-b : show-messages
