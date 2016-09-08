@@ -1,0 +1,230 @@
+* Firefox & Iceweasel Grimoire
+
+** Firefox: Open all links in current tab
+
+about:config
+browser.link.open_newwindow
+value: 1
+
+Open links in the same tab? | Firefox Support Forum | Mozilla Support
+https://support.mozilla.org/en-US/questions/970999
+
+** Firefox Quick keys
+
+*** Naviation
+Back A-<left arrow>
+Forward A-<right arrow>
+
+Open File C-o
+Reload F5, C-r
+Reload (override cache) C-F5, C-S-r
+Stop Esc
+
+*** Current Page
+
+Go Down a Screen <Page Down>
+Go Up a Screen <Page Up>
+Go to Bottom of Page <End>
+Go to Top of Page <Home>
+Zoom Reset C-0
+
+*** Tab Groups
+
+C-S-e Show all Tab Group
+C-` Next Tab Group
+C-S-` Previous Tab Group
+
+Tab Groups View C-S-e
+Close Tab Groups View Esc
+Next Tab Group C-`
+Previous Tab Group C-S-`
+
+*** Tabs
+
+C-S-t Open Last closed tab
+
+Move Tab in focus to Left C-S-<Page Up>
+Move Tab in focus to Right C-S-<Page Down>
+Move Tab in focus to start C-<Home>
+Move Tab in focus to end C-<End>
+
+Close Tab C-w, C-F4
+New Tab C-t
+
+Next Tab C-TAB, C-<Page Down>
+Previous Tab C-S-TAB, C-S-<Page Down>
+
+Open Address in New Tab A-<Enter>
+
+Undo Close Tab C-S-t
+
+Select Tab 1 to 8  A-(1 to 8)
+Select Last Tab A-9
+
+*** Windows
+
+Close Window C-S-w, A-F4
+New Window C-n
+New Private Window C-S-p
+
+Undo Close Window C-S-n
+
+*** History
+
+History Sidebar C-h
+Libary Window (History) C-S-h
+Clear Recent History C-S-DEL
+
+*** Tools
+
+Addons C-S-a
+Toggle Developer Tools F12, C-S-i
+Responsive Design View
+Page Source C-u
+Page Info C-i
+
+*** Searching
+
+Focus Search Bar/Box
+C-k
+C-j
+
+Switch search engine (When search bar is focused)
+C-<up arrow>
+C-<down arrow>
+
+Sesarch engine menu (When search bar is focused)
+A-<up arrow>
+A-<down arrow>
+<F4>
+** Firefox Developer Edition Quick keys
+
+Reload (override cache): C-<F5>, C-S-r
+
+Reload: <F5>, C-r
+
+Toggle Tools: C-S-i
+Style Editor: S-<F7>
+Developer Toolbar: S-<F2>
+** Addons
+*** tab groups
+Note:
+The Tab Groups (Panorama) feature will be removed from Firefox in
+version 45.
+
+Discontinuing the Tab Groups feature
+https://support.mozilla.org/en-US/kb/tab-groups-removal
+
+Search Results for "tab+groups"
+https://addons.mozilla.org/en-US/firefox/search/?q=tab%2Bgroups&platform=all&appver=44.0&page=1&_pjax=true
+
+Tile Tabs
+https://addons.mozilla.org/en-US/firefox/addon/tile-tabs/?src=search
+
+OneTab
+https://addons.mozilla.org/en-US/firefox/addon/onetab/
+*** Essentials
+
+MultiFox
+Allows you to be simultaneously logged into multiple accounts.
+
+OneTab (EULA)
+OneTab - Too many tabs? Convert tabs to a list and reduce browser memory
+
+Multiple Tab Handler
+Provides features to close (, reload, etc.) multiple tabs at once.
+
+Copy All Links
+This lightweight add-on allows you to copy all the links in selection,
+all the links on the whole page, or all the links on all open tabs. It
+also allows you to choose weather to copy only the links to file
+sharing sites, only direct download links, or all the links.
+
+Wappalyzer
+Wappalyzer is a browser extension that identifies software on
+websites.
+https://addons.mozilla.org/en-US/firefox/addon/wappalyzer/
+
+Click&Clean
+The quick and easy way to delete your browsing history, erase all
+temporary internet files, remove downloaded files history, cookies,
+Flash LSO, typed URLs. Allows to delete private data when Firefox
+closes. Supported ext. tools like CCleaner. 
+*** Developer Addons
+
+Firebug
+https://addons.mozilla.org/en-US/firefox/addon/firebug/
+
+JSONView: View JSON documents in the browser.
+https://addons.mozilla.org/en-us/firefox/addon/jsonview/
+
+RESTClient, a debugger for RESTful web services.
+https://addons.mozilla.org/en-us/firefox/addon/restclient/
+
+Empty Cache Button
+https://addons.mozilla.org/en-us/firefox/addon/empty-cache-button/
+
+Webpage Screenshot in Firefox
+https://addons.mozilla.org/en-US/firefox/addon/fireshot/
+
+NoScript Security Suite
+https://addons.mozilla.org/en-us/firefox/addon/noscript/?src=cb-dl-mostpopular
+
+User Agent Switcher
+https://addons.mozilla.org/en-US/firefox/addon/user-agent-switcher/
+
+ColorZilla
+https://addons.mozilla.org/en-US/firefox/addon/colorzilla/
+
+Live HTTP Headers: View HTTP headers of a page and while browsing.
+https://addons.mozilla.org/en-US/firefox/addon/live-http-headers/
+
+Awesome Screenshot Plus - Capture, Annotate & More
+https://addons.mozilla.org/en-US/firefox/addon/awesome-screenshot-capture-/
+
+Cookies Manager+
+https://addons.mozilla.org/en-US/firefox/addon/cookies-manager-plus/
+
+BuiltWith
+https://addons.mozilla.org/en-US/firefox/addon/builtwith/
+
+Font Finder
+https://addons.mozilla.org/en-US/firefox/addon/font-finder/
+
+FireFontFamily
+https://addons.mozilla.org/en-US/firefox/addon/firefontfamily/
+
+Rainbow Color Tools
+https://addons.mozilla.org/en-US/firefox/addon/rainbow-color-tools/?src=collection&collection_id=da0ecd99-2289-7ab0-7d57-e7c489c845c3
+
+Tiny JavaScript Debugger
+https://addons.mozilla.org/en-US/firefox/addon/tiny-javascript-debugger/?src=collection&collection_id=da0ecd99-2289-7ab0-7d57-e7c489c845c3
+
+Web Developer
+https://addons.mozilla.org/en-US/firefox/addon/web-developer/?src=collection&collection_id=da0ecd99-2289-7ab0-7d57-e7c489c845c3
+** Firefox Files
+
+places.sqlite
+
+The file "places.sqlite" stores the annotations, bookmarks, favorite
+icons, input history, keywords, and browsing history (a record of
+visited pages).
+
+Places.sqlite is used in Firefox 3 and above, instead of the older
+bookmarks.html and history.dat files (the older files are left in the
+profile folder for backward compatibility). Starting in SeaMonkey 2.0,
+places.sqlite stores browsing history (but not bookmarks). In
+SeaMonkey 2.1 and above, places.sqlite is also used for storing
+bookmarks (instead of the older bookmarks.html file).
+
+source: http://kb.mozillazine.org/Places.sqlite
+
+profiles.ini
+
+Indicates that the "Don't ask at startup" option is selected.
+StartWithLastProfile=1
+
+Refers to the last selected profile. 
+Default=1
+
+source: http://kb.mozillazine.org/Profiles.ini_file
